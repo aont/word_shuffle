@@ -1,0 +1,58 @@
+<html>
+<head>
+<title>Mind Shuffle</title>
+<meta name="theme-color" content="#000000">
+<script>
+// configuration
+var wordpack0 = [];
+for (word_num=0; word_num<100; word_num++) {
+  wordpack0.push("単語" + (word_num+1));
+}
+var wordpack = wordpack0;
+
+var interval_sec = 10;
+</script>
+<script>
+var timer = null;
+
+function get_max_word_length() {
+  var num_words = wordpack.length;
+  var max_word_length = 0;
+  for(word_num=0; word_num<num_words; word_num++) {
+    var word_length = wordpack[word_num].length;
+    if (max_word_length < word_length) {
+      max_word_length = word_length;
+    }
+  }
+  return max_word_length;
+}
+
+function init() {
+  var max_word_length = get_max_word_length();
+  var div = document.getElementById("word");
+  div.style.fontSize = (100.0/(max_word_length+1)) + "vw";
+
+  setTimeout(periodic, 0);
+  timer = setInterval(periodic, interval_sec*1000);
+}
+
+var word_num_prev = -1;
+function gen_word_num() {
+  var num_words = wordpack.length;
+  do {
+    var word_num = Math.floor( Math.random() * num_words );
+  } while(word_num == word_num_prev);
+  word_num_prev = word_num;
+  return word_num;
+}
+
+function periodic() {
+  var word = wordpack[gen_word_num()];
+  var div = document.getElementById("word");
+  div.innerHTML = word;
+}
+</script>
+</head>
+<body bgcolor="#000000" onload="init()">
+<div id="word" style="color : white; width: calc(100vw - 15px); text-align: center;position: absolute; top: 50%; -webkit-transform : translate(0%, -50%); transform : translate(0%, -50%);"></div>
+</body>
